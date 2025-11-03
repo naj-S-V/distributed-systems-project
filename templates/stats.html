@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Stats for {{ link.short_code }}{% endblock %}
+{% block content %}
+<h2>📊 Stats for Short Code: <code>{{ link.short_code }}</code></h2>
+<p><strong>Original URL:</strong> <a href="{{ link.original_url }}" target="_blank">{{ link.original_url }}</a></p>
+<p><strong>Created At:</strong> {{ link.created_at }}</p>
+
+<hr>
+
+<h3>Click Events</h3>
+{% if events %}
+<table>
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>User Agent</th>
+            <th>IP Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in events %}
+        <tr>
+            <td>{{ e.timestamp }}</td>
+            <td>{{ e.user_agent or 'N/A' }}</td>
+            <td>{{ e.ip_address or 'N/A' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No click events yet for this link.</p>
+{% endif %}
+
+<a href="/links" class="back-link">← Back to all links</a>
+{% endblock %}

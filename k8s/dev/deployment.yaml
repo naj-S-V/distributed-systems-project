@@ -1,0 +1,50 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: scalable-app-dev
+  namespace: dev
+  labels:
+    app: scalable-app-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scalable-app-dev
+  template:
+    metadata:
+      labels:
+        app: scalable-app-dev
+    spec:
+      containers:
+      - name: scalable-app
+        image: python:3.11-slim   # ✅ image légère, propre pour Flask
+        imagePullPolicy: IfNotPresent
+        workingDir: /app
+        ports:
+        - containerPort: 5000
+
+        # ⚙️ Installe les modules + lance Flask
+        command: ["/bin/bash", "-c"]
+        args:
+          - |
+            echo "⏳ Waiting for MongoDB to be reachable..." &&
+            sleep 10 &&
+            pip install --no-cache-dir -r requirements.txt &&
+            flask run --host=0.0.0.0 --port=5000
+
+        env:
+        - name: FLASK_APP
+          value: "app.py"               # ton script Flask
+        - name: FLASK_DEBUG
+          value: "1"                    # hot reload activé
+        - name: MONGO_URI
+          value: "mongodb://root:example@mongodb.dev.svc.cluster.local:27017"  # ✅ connexion au cluster shardé
+
+        volumeMounts:
+        - name: dev-code
+          mountPath: /app               # dossier monté contenant ton code Flask
+      volumes:
+      - name: dev-code
+        hostPath:
+          path: /data/my-project        # dossier local monté dans Minikube
+          type: Directory
