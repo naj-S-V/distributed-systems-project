@@ -7,6 +7,47 @@
     <input type="url" id="url" name="url" required style="width: 80%; padding: 8px;">
     <button type="submit" class="btn">Shorten</button>
 </form>
+<hr>
+<h3>🔧 Database Migration Demo</h3>
+<p>This will add a new field <code>category = "general"</code> to all links that don't have it.</p>
+<button class="btn" onclick="runMigration()">Run Migration</button>
+<button class="btn" style="background:#007bff;" onclick="checkMigrationStatus()">Check Status</button>
+<div id="migration-result" style="margin-top:10px;"></div>
+
+<script>
+async function runMigration() {
+    const div = document.getElementById("migration-result");
+    div.innerHTML = "⏳ Running migration...";
+    try {
+        const res = await fetch("/run_migration", { method: "POST" });
+        const data = await res.json();
+        if (data.success) {
+            div.innerHTML = `<strong style="color:green;">${data.message}</strong>`;
+        } else {
+            div.innerHTML = `<strong style="color:red;">Error:</strong> ${data.error}`;
+        }
+    } catch (err) {
+        div.innerHTML = `<strong style="color:red;">${err.message}</strong>`;
+    }
+}
+
+async function checkMigrationStatus() {
+    const div = document.getElementById("migration-result");
+    div.innerHTML = "⏳ Checking...";
+    try {
+        const res = await fetch("/api/migration_status");
+        const data = await res.json();
+        div.innerHTML = `
+            <strong>Total links:</strong> ${data.total_links}<br>
+            <strong>Migrated:</strong> ${data.migrated_links}<br>
+            <strong>Pending:</strong> ${data.pending}
+        `;
+    } catch (err) {
+        div.innerHTML = `<strong style="color:red;">${err.message}</strong>`;
+    }
+}
+</script>
+
 
 <div id="result" style="margin-top: 20px;"></div>
 
