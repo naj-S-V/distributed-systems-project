@@ -30,7 +30,7 @@ All detailed setup guides and instructions are available on the **[GitHub Wiki](
 
 | Topic | Description |
 |--------|-------------|
-| [Database Setup](../..wiki/Database-setup-(replication,-sharding,-migration-strategy)) | MongoDB cluster, replication, and migration process |
+| [Database Setup](../../wiki/Database-setup-(replication,-sharding,-migration-strategy)) | MongoDB cluster, replication, and migration process |
 | [Monitoring & Scaling](../../wiki/Monitoring-&-Scaling-Instructions-and-Setup) | Cluster monitoring and scaling setup |
 | [CI/CD Pipeline](../../wiki/CI-CD-pipeline-details) | Automated build, test, and deployment process |
 | [Developer Onboarding](../../wiki/Onboarding-guide-for-new-developers) | Local setup and contribution guide |
