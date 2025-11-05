@@ -19,7 +19,16 @@ spec:
     spec:
       containers:
       - name: scalable-app
-        image: najsv98/scalable-app:build-18 # <-- CHANGED: Use a valid, numeric baseline image
-        imagePullPolicy: IfNotPresent # This is fine, new tags will trigger a pull
+        image: najsv98/scalable-app:build-18
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
+        env:
+          - name: FLASK_APP
+            value: "app.py"
+          - name: FLASK_ENV
+            value: "production"
+          - name: MONGO_URI
+            value: "mongodb://mongos.prod.svc.cluster.local:27017"
+          - name: PYTHONUNBUFFERED
+            value: "1"

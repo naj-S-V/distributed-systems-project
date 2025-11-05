@@ -6,7 +6,7 @@ metadata:
   labels:
     app: scalable-app
   annotations:
-    imageVersion: "1" # <-- ADDED: Sets the baseline version
+    imageVersion: "build-18" # <-- ADDED: Sets the baseline version
 spec:
   replicas: 2
   selector:
@@ -19,7 +19,16 @@ spec:
     spec:
       containers:
       - name: scalable-app
-        image: najsv98/scalable-app:1 # <-- CHANGED: Use a valid, numeric baseline image
+        image: najsv98/scalable-app:build-18 # <-- CHANGED: Use a valid, numeric baseline image
         imagePullPolicy: IfNotPresent # This is fine, new tags will trigger a pull
         ports:
         - containerPort: 5000
+        env:
+          - name: FLASK_APP
+            value: "app.py"
+          - name: FLASK_ENV
+            value: "test"
+          - name: MONGO_URI
+            value: "mongodb://mongos.test.svc.cluster.local:27017"
+          - name: PYTHONUNBUFFERED
+            value: "1"

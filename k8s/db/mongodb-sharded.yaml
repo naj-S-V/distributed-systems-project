@@ -1,19 +1,12 @@
-# ==========================================================
-# MongoDB Sharded + Replicated Cluster
-# Compatible with Flask URL Shortener Project
-# ==========================================================
+# ===============================================
+# MongoDB Sharded + Replicated Cluster (Reusable)
+# ===============================================
 
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: dev
----
 # ---------- Config Server ----------
 apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-configsvr
-  namespace: dev
 spec:
   ports:
     - port: 27019
@@ -24,7 +17,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb-configsvr
-  namespace: dev
 spec:
   serviceName: mongodb-configsvr
   replicas: 1
@@ -59,7 +51,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-shard1
-  namespace: dev
 spec:
   clusterIP: None
   ports:
@@ -71,7 +62,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb-shard1
-  namespace: dev
 spec:
   serviceName: mongodb-shard1
   replicas: 2
@@ -106,7 +96,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-shard2
-  namespace: dev
 spec:
   clusterIP: None
   ports:
@@ -118,7 +107,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb-shard2
-  namespace: dev
 spec:
   serviceName: mongodb-shard2
   replicas: 2
@@ -149,11 +137,11 @@ spec:
             storage: 1Gi
 ---
 # ---------- Router (mongos) ----------
+# ---------- Router (mongos) ----------
 apiVersion: v1
 kind: Service
 metadata:
   name: mongos
-  namespace: dev
 spec:
   type: ClusterIP
   ports:
@@ -165,7 +153,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongos
-  namespace: dev
 spec:
   replicas: 1
   selector:
@@ -179,6 +166,12 @@ spec:
       containers:
         - name: mongos
           image: mongo:7.0
-          command: ["mongos", "--configdb", "rs-config/mongodb-configsvr-0.mongodb-configsvr.dev.svc.cluster.local:27019", "--bind_ip_all"]
+          command:
+            - /bin/sh
+            - -c
+            - |
+              NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace);
+              echo "🚀 Starting mongos in namespace: $NAMESPACE";
+              mongos --configdb "rs-config/mongodb-configsvr-0.mongodb-configsvr.${NAMESPACE}.svc.cluster.local:27019" --bind_ip_all --port 27017
           ports:
             - containerPort: 27017
