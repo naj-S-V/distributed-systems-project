@@ -1,4 +1,4 @@
-# 🚀 Distributed Systems Project — Scalable URL Shortener
+# Distributed Systems Project — Scalable URL Shortener
 
 This repository contains the **Distributed Systems Project (2025)** — a scalable **URL Shortener** application deployed on a **Kubernetes cluster** with full CI/CD automation.
 
@@ -11,7 +11,7 @@ The goal is to demonstrate a professional-grade infrastructure that includes:
 
 ---
 
-## 🧩 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-------------|
@@ -24,7 +24,7 @@ The goal is to demonstrate a professional-grade infrastructure that includes:
 
 ---
 
-## 📘 Documentation
+## Documentation
 
 All detailed setup guides and instructions are available on the **[GitHub Wiki](../../wiki)**:
 
@@ -37,7 +37,7 @@ All detailed setup guides and instructions are available on the **[GitHub Wiki](
 
 ---
 
-## 🧠 Quick Start (Local Dev)
+## Quick Start (Local Dev)
 
 ```bash
 # Start Minikube
@@ -54,7 +54,7 @@ minikube service scalable-app -n dev
 
 ---
 
-## 🧾 License
+## License
 
 © 2025 — ECAM Brussels Engineering.  
 This project was developed as part of the **Scalable Architecture / Distributed Systems** course.
