@@ -33,6 +33,10 @@ spec:
             flask run --host=0.0.0.0 --port=5000
 
         env:
+        - name: REDIS_HOST
+          value: "redis-master.dev.svc.cluster.local"  # connexion au Redis master
+        - name: REDIS_PORT
+          value: "6379"                                # port de connexion au Redis master
         - name: FLASK_APP
           value: "app.py"               # ton script Flask
         - name: FLASK_DEBUG
